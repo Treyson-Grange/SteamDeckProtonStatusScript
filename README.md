@@ -7,7 +7,7 @@ a script that enhances Steam Store pages by displaying Proton compatibility stat
 ![Preview Image](./preview.png)
 
 ## I wouldve forked this but his repo includes more than just this script
-[Original repo](https://github.com/mkwsnyder/marks-user-scripts/tree/master/scripts/marks-steam-script)
+[Original repo](https://github.com/mkwsnyder/marks-user-scripts/tree/master/scripts/marks-steam-script) | [Original Creator](https://github.com/mkwsnyder)
 
 Thanks mark its cool i want steamdeck specific info
 
