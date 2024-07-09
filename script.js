@@ -4,14 +4,13 @@
 // @version      0.1.2
 // @description  Adds info from and links to SteamDB and ProtonDB (Proton Linux compatibility)
 // @author       Mark Snyder
-// @updateURL     https://raw.githubusercontent.com/mkwsnyder/marks-user-scripts/main/scripts/marks-steam-script/script.js
+// @updateURL    https://raw.githubusercontent.com/mkwsnyder/marks-user-scripts/main/scripts/marks-steam-script/script.js
 // @match        https://store.steampowered.com/app/*
 // @icon         https://www.google.com/s2/favicons?domain=steampowered.com
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 // made this in like 30 minutes so don't judge quality lol
-
 
 (() => {
     'use strict';
@@ -36,7 +35,7 @@
         document.querySelector("#appHubAppName").appendChild(btn);
     };
 
-    const addBadge = (text, backgroundColor, textColor = 'black') => {
+    const addBadge = (text, backgroundColor, textColor = 'black', imageUrl = '') => {
         const badge = document.createElement('div');
         badge.style.cssText = `
             font-family: "Abel", sans-serif;
@@ -51,17 +50,37 @@
             margin-bottom: 1rem;
             margin-left: 1rem;
             display: inline-block;
+            vertical-align: top;
             height: 35px;
             line-height: 35px;
-            align-items: center;
         `;
-        badge.innerHTML = `<span style="transform: scale(0.8, 1);">${text}</span>`;
+        const span = document.createElement('span');
+        span.style.transform = 'scale(0.8, 1)';
+        span.textContent = text;
+
+        badge.appendChild(span);
+
+        if (imageUrl) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = 'No Deck Info';
+            img.style.cssText = `
+                margin-left: 10px;
+                width: 20px;
+                height: 20px;
+                vertical-align: middle;
+            `;
+            badge.appendChild(img);
+        }
+
         document.querySelector('#appHubAppName').appendChild(badge);
         badge.outerHTML = `<a href="${protonDBurl}" target="_blank">${badge.outerHTML}</a>`;
     };
 
+
+
     const getProtonDBInfo = () => {
-        let lineBreak = document.createElement('br');
+        const lineBreak = document.createElement('br');
         document.querySelector('#appHubAppName').appendChild(lineBreak);
         GM_xmlhttpRequest({
             method: "GET",
@@ -95,15 +114,15 @@
                 try {
                     const data = JSON.parse(response.responseText);
                     const categories = {
-                        1: ['Deck Unplayable', 'red', 'black'],
-                        2: ['Deck Playable', 'rgb(238, 210, 2)', 'black'],
-                        3: ['Deck Verified', 'green', 'white'],
-                        0: ['No Deck Info', 'gray', 'black']
+                        1: ['Deck Unplayable', 'red', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/unsupported_50.png'],
+                        2: ['Deck Playable', 'rgb(255, 140, 0)', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/playable_50_1.png'],
+                        3: ['Deck Verified', 'green', 'white', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/verified_50.png'],
+                        0: ['No Deck Info', 'gray', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/unknown_50_1.png']
                     };
                     const category = categories[data.results.resolved_category] || categories[0];
                     addBadge(...category);
                 } catch {
-                    addBadge('No Deck Info', 'gray');
+                    addBadge('No Deck Info', 'gray', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/unknown_50_1.png');
                 }
             }
         });
