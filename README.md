@@ -4,6 +4,8 @@ a script that enhances Steam Store pages by displaying Proton compatibility stat
 
 **Note**: this only works in web browsers, not the official Steam client.
 
+![Preview Image](./preview.png)
+
 ## I wouldve forked this but his repo includes more than just this script
 [Original repo](https://github.com/mkwsnyder/marks-user-scripts/tree/master/scripts/marks-steam-script)
 
