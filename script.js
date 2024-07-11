@@ -1,16 +1,14 @@
 // ==UserScript==
-// @name         Mark's Steam Script
+// @name         Mark's (and Treyson's) Steam Script
 // @namespace    http://tampermonkey.net/
 // @version      0.1.2
-// @description  Adds info from and links to SteamDB and ProtonDB (Proton Linux compatibility)
+// @description  a script that enhances Steam Store pages by displaying Proton compatibility status and Steam Deck compatibility. The script also provides links to the game's ProtonDB and SteamDB pages for more details
 // @author       Mark Snyder
-// @updateURL    https://raw.githubusercontent.com/mkwsnyder/marks-user-scripts/main/scripts/marks-steam-script/script.js
+// @updateURL    https://github.com/Treyson-Grange/steamStoreScript/blob/master/script.js
 // @match        https://store.steampowered.com/app/*
 // @icon         https://www.google.com/s2/favicons?domain=steampowered.com
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
-
-// made this in like 30 minutes so don't judge quality lol
 
 (() => {
     'use strict';
@@ -37,25 +35,31 @@
 
     const addBadge = (text, backgroundColor, textColor = 'black', imageUrl = '') => {
         const badge = document.createElement('div');
+
         badge.style.cssText = `
-            font-family: "Abel", sans-serif;
-            text-transform: uppercase;
+            font-family: "Arial", "Helvetica", "sans-serif";
+            text-transform: capitalize;
             text-align: center;
             min-width: 220px;
             font-size: 22px;
             background: ${backgroundColor};
             color: ${textColor};
-            padding: 3px 3px;
+            padding: 1px;
+            border: none;
+            border-radius: 2px;
             margin-top: 1rem;
             margin-bottom: 1rem;
             margin-left: 1rem;
             display: inline-block;
             vertical-align: top;
-            height: 35px;
-            line-height: 35px;
+            padding: 0 15px;
+            line-height: 40px;
+            display: inline-block;
+            height: 42px;
         `;
         const span = document.createElement('span');
         span.style.transform = 'scale(0.8, 1)';
+        span.style.color = textColor
         span.textContent = text;
 
         badge.appendChild(span);
@@ -114,10 +118,10 @@
                 try {
                     const data = JSON.parse(response.responseText);
                     const categories = {
+                        0: ['No Deck Info', 'gray', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/unknown_50_1.png'],
                         1: ['Deck Unplayable', 'red', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/unsupported_50.png'],
                         2: ['Deck Playable', 'rgb(255, 140, 0)', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/playable_50_1.png'],
                         3: ['Deck Verified', 'green', 'white', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/verified_50.png'],
-                        0: ['No Deck Info', 'gray', 'black', 'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/steamworks_docs/english/unknown_50_1.png']
                     };
                     const category = categories[data.results.resolved_category] || categories[0];
                     addBadge(...category);
