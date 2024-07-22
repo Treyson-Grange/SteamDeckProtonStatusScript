@@ -1,4 +1,4 @@
-# Mark's Steam Script V2 By Treyson
+# Steam Deck Proton Status Script
 
 a script that enhances Steam Store pages by displaying Proton compatibility status and Steam Deck compatibility. The script also provides links to the game's ProtonDB and SteamDB pages for more details
 
@@ -9,7 +9,7 @@ a script that enhances Steam Store pages by displaying Proton compatibility stat
 ## I wouldve forked this but his repo includes more than just this script
 [Original repo](https://github.com/mkwsnyder/marks-user-scripts/tree/master/scripts/marks-steam-script) | [Original Creator](https://github.com/mkwsnyder)
 
-Thanks mark its cool i want steamdeck specific info
+Thanks mark its cool, I want steamdeck specific info :/
 
 ## How to Install
 

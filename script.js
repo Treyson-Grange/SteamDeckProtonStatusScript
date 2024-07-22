@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Mark's (and Treyson's) Steam Script
+// @name         Steam Deck Proton Status Script
 // @namespace    http://tampermonkey.net/
 // @version      0.1.2
 // @description  a script that enhances Steam Store pages by displaying Proton compatibility status and Steam Deck compatibility. The script also provides links to the game's ProtonDB and SteamDB pages for more details
-// @author       Mark Snyder
+// @author       Mark Snyder & Treyson Grange
 // @updateURL    https://github.com/Treyson-Grange/steamStoreScript/blob/master/script.js
 // @match        https://store.steampowered.com/app/*
 // @icon         https://www.google.com/s2/favicons?domain=steampowered.com
