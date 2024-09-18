@@ -12,11 +12,17 @@
 (function () {
   "use strict";
 
-  /**
-   * Rating Removal System
-   */
-  const elementsToRemove = [".ratingRow", ".ratingBlock"];
-  const STORAGE_KEY = "remove";
+  const elementsToRemove = [
+    ".ratingRow",
+    ".ratingBlock",
+    ".albumListScoreContainer",
+    ".rating",
+    ".ratingBar",
+  ];
+  const HIDE_SCORES_LS = "remove";
+
+  //
+  let referenceElement;
 
   const removeElements = () => {
     elementsToRemove.forEach((selector) => {
@@ -32,76 +38,117 @@
     });
   };
 
-  const toggleElements = () => {
-    const shouldRemove = localStorage.getItem(STORAGE_KEY) === "true";
-
+  const toggleElements = (shouldRemove) => {
     if (shouldRemove) {
-      showElements();
-      localStorage.setItem(STORAGE_KEY, "false");
-    } else {
       removeElements();
-      localStorage.setItem(STORAGE_KEY, "true");
+    } else {
+      showElements();
     }
+    localStorage.setItem(HIDE_SCORES_LS, shouldRemove ? "true" : "false");
+    updateStatusLabel();
   };
 
-  const addToggleButton = () => {
-    const toggleButton = document.createElement("button");
-    toggleButton.innerText = "Toggle Remove Elements";
-    toggleButton.style.margin = "0 1rem";
-    toggleButton.classList.add("albumButton");
-    toggleButton.addEventListener("click", toggleElements);
-
-    document.querySelector(".sectionHeading").prepend(toggleButton);
-  };
-
-  /**
-   * Settings System
-   */
   const onSettings = () => {
     const page = window.location.pathname;
-    console.log(page);
     return page === "/account/edit.php";
   };
 
   const settingsInit = () => {
-    if (onSettings) {
+    if (onSettings()) {
       settingHeader();
-      setting("test", "test", "test");
-    } else {
-      return;
+      settingText("Hide Scores on AOTY, fight Bias!");
+      settingRadioInput("Show Scores", "Hide Scores", HIDE_SCORES_LS);
     }
+  };
+
+  const getOrCreateReferenceElement = () => {
+    if (!referenceElement) {
+      const namedForm = document.querySelector('form[name="form"]');
+
+      if (namedForm) {
+        referenceElement = document.createElement("div");
+        referenceElement.id = "aotyScriptReference";
+        namedForm.insertAdjacentElement("afterend", referenceElement);
+      }
+    }
+    return referenceElement;
   };
 
   const settingHeader = () => {
     const sectionHeader = document.createElement("div");
-    const namedForm = document.querySelector('form[name="form"]');
-    const lineBreak = document.createElement("br");
+    sectionHeader.style.marginTop = "1rem";
+    sectionHeader.classList.add("sectionHeading");
+    sectionHeader.innerText = "AOTY Script Options";
 
-    if (namedForm) {
-      sectionHeader.classList.add("sectionHeading");
-      sectionHeader.innerText = "AOTY Script Options";
-      namedForm.insertAdjacentElement("afterend", sectionHeader);
-      namedForm.insertAdjacentElement("afterend", lineBreak);
-    }
+    const reference = getOrCreateReferenceElement();
+    reference.insertAdjacentElement("beforebegin", sectionHeader);
   };
 
-  const setting = (text, localStorageItem, newDecision) => {
-    const sectionDiv = document.querySelector(".section");
-    if (sectionDiv) {
-      const toggleButton = document.createElement("button");
-      toggleButton.innerText = text;
-      toggleButton.classList.add("albumButton");
-      toggleButton.addEventListener("click", () => {
-        localStorage.setItem(localStorageItem, newDecision);
-      });
-      sectionDiv.appendChild(toggleButton);
-    } else {
-      console.log("error");
-    }
+  const settingText = (text) => {
+    const p = document.createElement("p");
+    p.innerText = text;
+    p.style.marginBottom = "10px";
+
+    const reference = getOrCreateReferenceElement();
+    reference.insertAdjacentElement("beforebegin", p);
+  };
+
+  const settingRadioInput = (labelShow, labelHide, localStorageItem) => {
+    const form = document.createElement("div");
+
+    const statusLabel = document.createElement("div");
+    statusLabel.id = "statusLabel";
+    statusLabel.style.marginBottom = "10px";
+    form.appendChild(statusLabel);
+
+    const radioShow = createRadioOption("show", labelShow, localStorageItem);
+    const radioHide = createRadioOption("hide", labelHide, localStorageItem);
+
+    const radioContainer = document.createElement("div");
+    radioContainer.style.display = "inline-flex";
+    radioContainer.style.gap = "20px";
+
+    radioContainer.appendChild(radioShow.container);
+    radioContainer.appendChild(radioHide.container);
+
+    form.appendChild(radioContainer);
+
+    const reference = getOrCreateReferenceElement();
+    reference.insertAdjacentElement("beforebegin", form);
+  };
+
+  const createRadioOption = (value, labelText, localStorageItem) => {
+    const isChecked =
+      localStorage.getItem(localStorageItem) ===
+      (value === "hide" ? "true" : "false");
+
+    const container = document.createElement("div");
+    container.style.display = "inline-flex";
+    container.style.alignItems = "center";
+
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "showHideScores";
+    radio.value = value;
+    radio.checked = isChecked;
+
+    radio.addEventListener("change", () => {
+      toggleElements(value === "hide");
+    });
+
+    const label = document.createElement("label");
+    label.innerText = labelText;
+    label.style.marginLeft = "5px";
+
+    container.appendChild(radio);
+    container.appendChild(label);
+
+    return { container };
   };
 
   const init = () => {
-    if (localStorage.getItem(STORAGE_KEY) === "true") {
+    const shouldRemove = localStorage.getItem(HIDE_SCORES_LS) === "true";
+    if (shouldRemove) {
       removeElements();
     } else {
       showElements();
@@ -110,14 +157,8 @@
 
   const main = () => {
     init();
-    addToggleButton();
     settingsInit();
   };
 
   main();
 })();
-
-/**
- * OK Ideas here.
- * Get rid of ratings ON the settings page. add more options.
- */
