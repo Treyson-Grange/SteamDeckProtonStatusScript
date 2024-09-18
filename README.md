@@ -1,15 +1,13 @@
-# Steam Deck Proton Status Script
+# Scripts and such
 
-a script that enhances Steam Store pages by displaying Proton compatibility status and Steam Deck compatibility. The script also provides links to the game's ProtonDB and SteamDB pages for more details
+These are tamper monkey scripts that I use.
+I made/forked these when applicable in order to use my favorite sites the way I want to use them.
+Feel free to use these, fork em, or rewrite em to your optimization desires.
 
-**Note**: this only works in web browsers, not the official Steam client.
+## Glossary
 
-![Preview Image](./preview.png)
-
-## I wouldve forked this but his repo includes more than just this script
-[Original repo](https://github.com/mkwsnyder/marks-user-scripts/tree/master/scripts/marks-steam-script) | [Original Creator](https://github.com/mkwsnyder)
-
-Thanks mark its cool, I want steamdeck specific info :/
+- **[SteamDeckProtonStatusScript](./SteamDeckProtonStatus/README.md)**: A script written by users to modify web pages or add new functionalities.
+- **[AOTY](./AOTY/README.md)**: The main interface of Tampermonkey where users can manage their scripts.
 
 ## How to Install
 
@@ -25,7 +23,3 @@ This requires the [Tampermonkey](https://www.tampermonkey.net/) extension or som
 3. Go to the "Utilities" tab on the right
 4. Copy [this link](https://raw.githubusercontent.com/mkwsnyder/marks-user-scripts/main/scripts/marks-steam-script/script.js) and paste it into the "Install from URL" option, then click "Install".
 5. Click "Install" on the next screen
-
-## Notes
-
-When you first view a page where it will run (a page for a game) it will ask you if it can make a web request. This is simply getting a JSON file from [ProtonDB](https://www.protondb.com/) for the Linux compatibility. Always allowing it will make it run without issue.
